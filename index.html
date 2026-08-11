@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jyoti Achudhan Nair — Technical Lead, Front-End Architecture</title>
+<meta name="description" content="Jyoti Achudhan Nair — Technical Lead & Front-End Architect specialising in banking, fintech and capital markets platforms. 10+ years across OCBC, UOB and Thales.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%230B1E2E'/%3E%3Ctext x='32' y='42' font-family='Georgia,serif' font-size='28' fill='%23B8863B' text-anchor='middle'%3EJN%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* Two-color palette: Ink (near-black navy) + Gilt (gold accent), on a white/paper neutral. */
+    --ink:#0B1E2E;
+    --chalk:#F4F5F0;
+    --chalk-2:#EAEBE3;
+    --gilt:#B8863B;
+    --gilt-deep:#8F6A28;
+    --white:#FFFFFF;
+    /* everything below is a tint/opacity of Ink or Chalk — not a new hue */
+    --slate:rgba(11,30,46,0.72);
+    --slate-light:rgba(244,245,240,0.72);
+    --wire:rgba(244,245,240,0.26);
+    --wire-soft:rgba(244,245,240,0.09);
+    --line:rgba(11,30,46,0.14);
+    --font-display:'Space Grotesk',sans-serif;
+    --font-body:'Source Serif 4',serif;
+    --font-mono:'JetBrains Mono',monospace;
+    --sp-1:0.4rem; --sp-2:0.8rem; --sp-3:1.2rem; --sp-4:1.8rem;
+    --sp-5:2.6rem; --sp-6:4rem; --sp-7:6rem; --sp-8:8.5rem;
+    --maxw:1180px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--chalk);
+    color:var(--ink);
+    font-family:var(--font-body);
+    font-size:17px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  img{max-width:100%;display:block;}
+  a{color:inherit;}
+  h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;margin:0;letter-spacing:-0.01em;}
+  p{margin:0;}
+  ul{margin:0;padding:0;list-style:none;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--sp-5);}
+  @media (max-width:640px){ .wrap{padding:0 var(--sp-3);} }
+
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:0.72rem;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--gilt);
+    display:flex;
+    align-items:center;
+    gap:var(--sp-2);
+  }
+  .eyebrow::before{
+    content:"";
+    width:22px;height:1px;background:var(--gilt);
+    display:inline-block;
+  }
+
+  /* ---------- reveal on scroll ---------- */
+  .reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease, transform .6s ease;}
+  .reveal.is-visible{opacity:1;transform:translateY(0);}
+  @media (prefers-reduced-motion: reduce){
+    .reveal{opacity:1;transform:none;transition:none;}
+    html{scroll-behavior:auto;}
+  }
+
+  /* ---------- nav ---------- */
+  header.nav{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    background:rgba(11,30,46,0.88);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid rgba(184,134,59,0.25);
+  }
+  .nav-inner{
+    max-width:var(--maxw);margin:0 auto;padding:0 var(--sp-5);
+    display:flex;align-items:center;justify-content:space-between;
+    height:64px;
+  }
+  .brand{
+    display:flex;align-items:center;gap:var(--sp-2);
+    font-family:var(--font-mono);color:var(--chalk);
+    text-decoration:none;font-size:0.85rem;letter-spacing:0.05em;
+  }
+  .brand-mark{
+    width:32px;height:32px;border:1px solid var(--gilt);
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--font-display);font-weight:700;color:var(--gilt);font-size:0.9rem;
+  }
+  nav.links{display:flex;gap:var(--sp-5);}
+  nav.links a{
+    font-family:var(--font-mono);font-size:0.78rem;letter-spacing:0.06em;
+    text-transform:uppercase;color:var(--slate-light);text-decoration:none;
+    position:relative;padding-bottom:4px;
+  }
+  nav.links a::after{
+    content:"";position:absolute;left:0;bottom:0;width:0;height:1px;
+    background:var(--gilt);transition:width .25s ease;
+  }
+  nav.links a:hover{color:var(--chalk);}
+  nav.links a:hover::after{width:100%;}
+  .nav-toggle{display:none;background:none;border:1px solid var(--wire);color:var(--chalk);
+    font-family:var(--font-mono);font-size:0.75rem;padding:6px 10px;letter-spacing:0.08em;cursor:pointer;}
+  @media (max-width:760px){
+    nav.links{
+      position:absolute;top:64px;left:0;right:0;
+      background:var(--ink);flex-direction:column;gap:0;
+      max-height:0;overflow:hidden;transition:max-height .3s ease;
+      border-bottom:1px solid rgba(184,134,59,0.25);
+    }
+    nav.links.open{max-height:320px;}
+    nav.links a{padding:var(--sp-3) var(--sp-5);border-top:1px solid rgba(255,255,255,0.06);}
+    nav.links a::after{display:none;}
+    .nav-toggle{display:block;}
+  }
+
+  /* ---------- hero ---------- */
+  .hero{
+    position:relative;
+    background:var(--ink);
+    color:var(--chalk);
+    padding:calc(64px + var(--sp-7)) 0 var(--sp-6);
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";position:absolute;inset:0;
+    background-image:
+      repeating-linear-gradient(0deg, var(--wire-soft) 0 1px, transparent 1px 48px),
+      repeating-linear-gradient(90deg, var(--wire-soft) 0 1px, transparent 1px 48px);
+    mask-image:linear-gradient(to bottom, rgba(0,0,0,0.9), rgba(0,0,0,0.15) 85%);
+    pointer-events:none;
+  }
+  .hero-inner{position:relative;z-index:1;}
+  .hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:var(--sp-5);}
+  .hero-copy{max-width:660px;}
+  .hero-copy h1{font-size:clamp(2.4rem, 5.6vw, 4.1rem);margin-top:var(--sp-3);line-height:1.04;}
+  .hero-role{
+    font-family:var(--font-mono);font-size:0.98rem;color:var(--gilt);
+    margin-top:var(--sp-3);letter-spacing:0.01em;
+  }
+  .hero-copy .lede{
+    font-family:var(--font-body);font-size:1.15rem;color:var(--slate-light);
+    margin-top:var(--sp-3);max-width:560px;
+  }
+  .hero-cta{display:flex;gap:var(--sp-3);margin-top:var(--sp-5);flex-wrap:wrap;}
+  .btn{
+    font-family:var(--font-mono);font-size:0.8rem;letter-spacing:0.06em;text-transform:uppercase;
+    padding:12px 22px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;
+    border:1px solid var(--gilt);transition:all .2s ease;
+  }
+  .btn-solid{background:var(--gilt);color:var(--ink);}
+  .btn-solid:hover{background:var(--chalk);border-color:var(--chalk);}
+  .btn-outline{color:var(--chalk);border-color:var(--wire);}
+  .btn-outline:hover{border-color:var(--gilt);color:var(--gilt);}
+
+  /* stamp */
+  .stamp{
+    flex:0 0 auto;
+    width:112px;height:112px;border-radius:50%;
+    border:2px double var(--gilt);
+    display:flex;align-items:center;justify-content:center;text-align:center;
+    transform:rotate(-9deg);
+    color:var(--gilt);
+    font-family:var(--font-mono);font-weight:700;font-size:0.68rem;
+    letter-spacing:0.06em;line-height:1.5;text-transform:uppercase;
+  }
+
+  /* title-block spec table */
+  .titleblock{
+    margin-top:var(--sp-7);
+    border-top:1px solid var(--wire);
+    display:grid;grid-template-columns:repeat(3,1fr);
+  }
+  .tb-field{
+    padding:var(--sp-4) var(--sp-4) var(--sp-4) 0;
+    border-right:1px solid var(--wire);
+    border-bottom:1px solid var(--wire);
+  }
+  .tb-field:nth-child(3n){border-right:none;}
+  .tb-field .label{
+    font-family:var(--font-mono);font-size:0.66rem;letter-spacing:0.14em;
+    text-transform:uppercase;color:var(--slate-light);
+  }
+  .tb-field .value{
+    font-family:var(--font-display);font-size:1.15rem;margin-top:6px;color:var(--chalk);
+  }
+  @media (max-width:760px){
+    .hero-top{flex-direction:column;}
+    .stamp{align-self:flex-start;}
+    .titleblock{grid-template-columns:repeat(2,1fr);}
+    .tb-field:nth-child(3n){border-right:1px solid var(--wire);}
+    .tb-field:nth-child(2n){border-right:none;}
+  }
+  @media (max-width:460px){
+    .titleblock{grid-template-columns:1fr;}
+    .tb-field{border-right:none !important;}
+  }
+
+  /* signature migration diagram */
+  .blueprint{margin-top:var(--sp-6);}
+  .blueprint svg{width:100%;height:auto;display:block;}
+  .bp-box-legacy{fill:rgba(255,255,255,0.03);stroke:var(--slate-light);stroke-dasharray:5 4;}
+  .bp-box-current{fill:rgba(184,134,59,0.08);stroke:var(--gilt);}
+  .bp-line{stroke:var(--wire);}
+  .bp-text-tag{font-family:var(--font-mono);font-size:10px;letter-spacing:0.12em;}
+  .bp-text-main{font-family:var(--font-display);font-weight:600;font-size:19px;}
+  .bp-text-sub{font-family:var(--font-body);font-style:italic;font-size:12px;}
+  .bp-text-dim{font-family:var(--font-mono);font-size:11px;letter-spacing:0.08em;}
+
+  /* ---------- section shell ---------- */
+  section{padding:var(--sp-7) 0;}
+  .section-head{display:flex;flex-direction:column;gap:var(--sp-2);margin-bottom:var(--sp-6);}
+  .section-head h2{font-size:clamp(1.7rem,3.4vw,2.3rem);}
+  .divider{
+    display:flex;align-items:center;gap:var(--sp-3);
+    margin:var(--sp-7) 0;color:var(--slate);
+    font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;
+  }
+  .divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--line);}
+  .divider::before{background-image:linear-gradient(90deg, var(--slate) 0 1px, transparent 1px 8px);background-size:8px 1px;}
+
+  /* ---------- profile ---------- */
+  .profile-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:var(--sp-6);align-items:start;}
+  .profile-copy p{font-size:1.12rem;color:var(--slate);max-width:60ch;}
+  .profile-copy p + p{margin-top:var(--sp-3);}
+  .ledger{border-top:1px solid var(--line);}
+  .ledger-row{
+    display:flex;justify-content:space-between;align-items:baseline;
+    padding:var(--sp-3) 0;border-bottom:1px solid var(--line);
+  }
+  .ledger-row .k{font-family:var(--font-mono);font-size:0.85rem;color:var(--slate);letter-spacing:0.02em;}
+  .ledger-row .v{font-family:var(--font-display);font-size:1.4rem;color:var(--ink);}
+  @media (max-width:860px){ .profile-grid{grid-template-columns:1fr;} }
+
+  .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:var(--sp-4);}
+  .tag{
+    font-family:var(--font-mono);font-size:0.74rem;color:var(--slate);
+    border:1px solid var(--line);padding:5px 11px;letter-spacing:0.02em;
+  }
+
+  /* ---------- skills spec table ---------- */
+  .spec-table{border-top:1px solid var(--line);}
+  .spec-row{
+    display:grid;grid-template-columns:200px 1fr;gap:var(--sp-4);
+    padding:var(--sp-4) 0;border-bottom:1px solid var(--line);
+  }
+  .spec-row .cat{font-family:var(--font-mono);font-size:0.78rem;letter-spacing:0.08em;
+    text-transform:uppercase;color:var(--gilt-deep);padding-top:2px;}
+  .spec-row .chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{
+    font-family:var(--font-mono);font-size:0.82rem;background:var(--chalk-2);
+    padding:6px 12px;color:var(--ink);
+  }
+  @media (max-width:640px){ .spec-row{grid-template-columns:1fr;gap:var(--sp-2);} }
+
+  /* ---------- experience ---------- */
+  .role{
+    border:1px solid var(--line);
+    background:var(--white);
+    margin-bottom:var(--sp-5);
+  }
+  .role-head{
+    display:flex;justify-content:space-between;gap:var(--sp-4);flex-wrap:wrap;
+    padding:var(--sp-4) var(--sp-5);
+    border-bottom:1px solid var(--line);
+    background:var(--chalk-2);
+  }
+  .role-sheet{font-family:var(--font-mono);font-size:0.7rem;color:var(--slate);letter-spacing:0.1em;}
+  .role-head h3{font-size:1.35rem;margin-top:4px;}
+  .role-head .company{font-family:var(--font-mono);font-size:0.88rem;color:var(--gilt-deep);margin-top:4px;}
+  .role-meta{text-align:right;font-family:var(--font-mono);font-size:0.8rem;color:var(--slate);white-space:nowrap;}
+  .role-body{padding:var(--sp-5);}
+  .role-body > .bullets{margin-bottom:0;}
+  .bullets li{
+    position:relative;padding-left:20px;color:var(--slate);
+    font-size:0.99rem;margin-bottom:10px;
+  }
+  .bullets li::before{content:"—";position:absolute;left:0;color:var(--gilt);font-family:var(--font-mono);}
+  .bullets li:last-child{margin-bottom:0;}
+  .bullets li strong{color:var(--ink);}
+
+  .subprojects{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-4);}
+  @media (max-width:760px){ .subprojects{grid-template-columns:1fr;} }
+  .subproject{border:1px solid var(--line);padding:var(--sp-4);background:var(--chalk);}
+  .subproject h4{font-size:1.02rem;margin-bottom:var(--sp-3);}
+  .subproject .badge{
+    display:inline-block;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;
+    color:var(--ink);border:1px solid var(--ink);padding:2px 7px;margin-bottom:8px;text-transform:uppercase;opacity:0.75;
+  }
+
+  /* ---------- awards ---------- */
+  .awards-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-4);}
+  @media (max-width:700px){ .awards-grid{grid-template-columns:1fr;} }
+  .award-card{
+    border:1px solid var(--line);border-left:3px solid var(--gilt);
+    padding:var(--sp-4) var(--sp-5);background:var(--white);
+    display:flex;flex-direction:column;gap:6px;
+  }
+  .award-card .year{font-family:var(--font-mono);font-size:0.72rem;color:var(--gilt-deep);letter-spacing:0.1em;}
+  .award-card h4{font-size:1.08rem;}
+  .award-card p{color:var(--slate);font-size:0.95rem;}
+
+  /* ---------- credentials ---------- */
+  .cred-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-6);}
+  @media (max-width:700px){ .cred-grid{grid-template-columns:1fr;gap:var(--sp-5);} }
+  .cred-grid h3{font-size:1rem;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:0.1em;color:var(--slate);margin-bottom:var(--sp-3);}
+  .cred-item{padding:var(--sp-3) 0;border-bottom:1px solid var(--line);}
+  .cred-item .t{font-family:var(--font-display);font-size:1.05rem;}
+  .cred-item .s{font-family:var(--font-mono);font-size:0.82rem;color:var(--slate);margin-top:3px;}
+  .cred-item .s a{color:var(--gilt-deep);text-decoration:underline;text-underline-offset:2px;}
+  .cred-item .s a:hover{color:var(--gilt);}
+  .issuer-tag{
+    display:inline-flex;align-items:center;gap:5px;
+    font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;
+    border:1px solid var(--ink);color:var(--ink);padding:2px 7px;margin-left:10px;
+    vertical-align:middle;opacity:0.75;
+  }
+  .issuer-tag .dot{width:5px;height:5px;border-radius:50%;background:var(--ink);display:inline-block;}
+
+  /* ---------- contact / footer ---------- */
+  footer{
+    background:var(--ink);color:var(--chalk);position:relative;overflow:hidden;
+    padding:var(--sp-7) 0 var(--sp-5);
+  }
+  footer::before{
+    content:"";position:absolute;inset:0;
+    background-image:
+      repeating-linear-gradient(0deg, var(--wire-soft) 0 1px, transparent 1px 48px),
+      repeating-linear-gradient(90deg, var(--wire-soft) 0 1px, transparent 1px 48px);
+    mask-image:radial-gradient(circle at 30% 30%, rgba(0,0,0,0.8), transparent 70%);
+    pointer-events:none;
+  }
+  .footer-inner{position:relative;z-index:1;}
+  footer h2{font-size:clamp(1.9rem,4vw,2.7rem);max-width:14ch;}
+  .footer-sub{color:var(--slate-light);font-size:1.05rem;margin-top:var(--sp-3);max-width:52ch;}
+  .contact-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-4);
+    margin-top:var(--sp-6);border-top:1px solid var(--wire);
+  }
+  .contact-item{padding:var(--sp-4) var(--sp-4) var(--sp-4) 0;border-bottom:1px solid var(--wire);}
+  .contact-item .label{font-family:var(--font-mono);font-size:0.66rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--slate-light);}
+  .contact-item a, .contact-item span{
+    display:block;margin-top:8px;font-family:var(--font-display);font-size:1.05rem;
+    color:var(--chalk);text-decoration:none;word-break:break-word;
+  }
+  .contact-item a:hover{color:var(--gilt);}
+  @media (max-width:700px){ .contact-grid{grid-template-columns:1fr;} }
+  .foot-bottom{
+    margin-top:var(--sp-6);display:flex;justify-content:space-between;flex-wrap:wrap;gap:var(--sp-2);
+    font-family:var(--font-mono);font-size:0.72rem;color:var(--slate-light);letter-spacing:0.04em;
+  }
+
+  ::selection{background:var(--gilt);color:var(--ink);}
+  a:focus-visible, button:focus-visible{outline:2px solid var(--gilt);outline-offset:3px;}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a href="#top" class="brand"><span class="brand-mark">JN</span> JYOTI&nbsp;NAIR</a>
+    <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks">MENU</button>
+    <nav class="links" id="navLinks">
+      <a href="#profile">Profile</a>
+      <a href="#skills">Skills</a>
+      <a href="#experience">Experience</a>
+      <a href="#awards">Awards</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ===================== HERO ===================== -->
+  <section class="hero">
+    <div class="wrap hero-inner">
+      <div class="hero-top">
+        <div class="hero-copy">
+          <p class="eyebrow">Technical Lead — Front-End Architecture</p>
+          <h1>Jyoti Achudhan Nair</h1>
+          <p class="hero-role">Banking&nbsp;·&nbsp;Fintech&nbsp;·&nbsp;Capital Markets — Singapore</p>
+          <p class="lede">I turn legacy banking platforms into modern, revenue-driving products — leading frontend architecture and cross-functional Agile teams across OCBC, UOB and Thales for the past 10+ years.</p>
+          <div class="hero-cta">
+            <a class="btn btn-solid" href="mailto:jyotinair31@gmail.com">Email Me</a>
+            <a class="btn btn-outline" href="https://linkedin.com/in/jyoti-nair-software-engineer" target="_blank" rel="noopener">Connect on LinkedIn</a>
+          </div>
+        </div>
+        <div class="stamp">Open to<br>New Roles</div>
+      </div>
+
+      <div class="titleblock">
+        <div class="tb-field"><div class="label">Role</div><div class="value">Technical Lead / TPM</div></div>
+        <div class="tb-field"><div class="label">Focus</div><div class="value">Front-End Architecture</div></div>
+        <div class="tb-field"><div class="label">Based In</div><div class="value">Singapore</div></div>
+        <div class="tb-field"><div class="label">Experience</div><div class="value">10+ Years</div></div>
+        <div class="tb-field"><div class="label">Team Led</div><div class="value">8–9 Engineers</div></div>
+        <div class="tb-field"><div class="label">Latest Citation</div><div class="value">Spot-On Award, 2025</div></div>
+      </div>
+
+      <!-- signature diagram: legacy-to-modern migration, her recurring career thread -->
+      <div class="blueprint reveal">
+        <svg viewBox="0 0 900 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram showing migration from legacy ASP.NET systems to React.js and TypeScript micro-frontends, architected by Jyoti Nair">
+          <line x1="60" y1="34" x2="840" y2="34" class="bp-line" stroke-width="1"/>
+          <line x1="60" y1="26" x2="60" y2="42" class="bp-line" stroke-width="1"/>
+          <line x1="840" y1="26" x2="840" y2="42" class="bp-line" stroke-width="1"/>
+          <text x="450" y="24" text-anchor="middle" class="bp-text-dim" fill="var(--slate-light)">MODERNISATION PROGRAMME — 2022 – PRESENT</text>
+
+          <rect x="60" y="70" width="270" height="120" class="bp-box-legacy" stroke-width="1.25"/>
+          <text x="82" y="98" class="bp-text-tag" fill="var(--slate-light)">LEGACY</text>
+          <text x="82" y="132" class="bp-text-main" fill="var(--chalk)">ASP.NET</text>
+          <text x="82" y="156" class="bp-text-sub" fill="var(--slate-light)">Government · Unit Trust</text>
+          <text x="82" y="174" class="bp-text-sub" fill="var(--slate-light)">Back-office modules</text>
+
+          <line x1="330" y1="130" x2="560" y2="130" stroke="var(--gilt)" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <text x="445" y="118" text-anchor="middle" class="bp-text-tag" fill="var(--gilt)">ARCHITECTED &amp; MIGRATED</text>
+
+          <rect x="570" y="70" width="270" height="120" class="bp-box-current" stroke-width="1.5"/>
+          <text x="592" y="98" class="bp-text-tag" fill="var(--gilt)">CURRENT</text>
+          <text x="592" y="132" class="bp-text-main" fill="var(--chalk)">React.js + TypeScript</text>
+          <text x="592" y="156" class="bp-text-sub" fill="var(--slate-light)">Micro-frontend architecture</text>
+          <text x="592" y="174" class="bp-text-sub" fill="var(--slate-light)">OCBC · UOB trading &amp; banking</text>
+
+          <text x="840" y="222" text-anchor="end" class="bp-text-dim" fill="var(--slate-light)">ARCHITECT — J. NAIR</text>
+
+          <defs>
+            <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+              <path d="M0,0 L8,3 L0,6 Z" fill="var(--gilt)"/>
+            </marker>
+          </defs>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PROFILE ===================== -->
+  <section id="profile">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">Profile</p>
+        <h2>Ten years, three banks, one recurring brief</h2>
+      </div>
+      <div class="profile-grid">
+        <div class="profile-copy reveal">
+          <p>I'm a Technical Project Manager and front-end architect with 10+ years delivering enterprise-scale digital products across OCBC, UOB and Thales. I lead cross-functional Agile teams, define frontend architecture, and mentor engineers while modernising legacy platforms — most often taking systems from ASP.NET to React.js and TypeScript.</p>
+          <p>I partner closely with Product Managers, UX Designers, Architects and QA to turn business requirements into scalable solutions, and I've been an early adopter of AI-assisted engineering — using GitHub Copilot, Claude Code, Devin, Windsurf and Codex to speed up development, testing and documentation.</p>
+          <div class="tags">
+            <span class="tag">Technical Leadership</span>
+            <span class="tag">Solution Architecture</span>
+            <span class="tag">React Architecture</span>
+            <span class="tag">Micro-Frontends</span>
+            <span class="tag">Agile Scrum</span>
+            <span class="tag">Sprint Planning</span>
+            <span class="tag">Stakeholder Management</span>
+            <span class="tag">Mentoring</span>
+            <span class="tag">AI-Assisted Development</span>
+          </div>
+        </div>
+        <div class="ledger reveal">
+          <div class="ledger-row"><span class="k">Years in industry</span><span class="v">10+</span></div>
+          <div class="ledger-row"><span class="k">Banks &amp; institutions led</span><span class="v">5</span></div>
+          <div class="ledger-row"><span class="k">Awards &amp; citations</span><span class="v">4</span></div>
+          <div class="ledger-row"><span class="k">Certifications</span><span class="v">3</span></div>
+          <div class="ledger-row"><span class="k">Frontend team directed</span><span class="v">8–9</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SKILLS ===================== -->
+  <section id="skills">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">Technologies</p>
+        <h2>The stack, by discipline</h2>
+      </div>
+      <div class="spec-table reveal">
+        <div class="spec-row">
+          <div class="cat">Frontend</div>
+          <div class="chips">
+            <span class="chip">React.js</span><span class="chip">TypeScript</span><span class="chip">JavaScript</span>
+            <span class="chip">Redux Toolkit</span><span class="chip">React Hooks</span><span class="chip">HTML5</span>
+            <span class="chip">SCSS</span><span class="chip">Tailwind CSS</span>
+          </div>
+        </div>
+        <div class="spec-row">
+          <div class="cat">Backend</div>
+          <div class="chips">
+            <span class="chip">Java Spring Boot</span><span class="chip">Node.js</span>
+            <span class="chip">REST APIs</span><span class="chip">Microservices</span>
+          </div>
+        </div>
+        <div class="spec-row">
+          <div class="cat">Cloud / DevOps</div>
+          <div class="chips">
+            <span class="chip">AWS</span><span class="chip">Jenkins</span><span class="chip">OpenShift</span>
+            <span class="chip">CI/CD</span><span class="chip">Git</span>
+          </div>
+        </div>
+        <div class="spec-row">
+          <div class="cat">Collaboration</div>
+          <div class="chips">
+            <span class="chip">Jira</span><span class="chip">Confluence</span><span class="chip">Figma</span><span class="chip">Kibana</span>
+          </div>
+        </div>
+        <div class="spec-row">
+          <div class="cat">AI Tooling</div>
+          <div class="chips">
+            <span class="chip">GitHub Copilot</span><span class="chip">Claude Code</span><span class="chip">Devin</span>
+            <span class="chip">Windsurf</span><span class="chip">Codex</span><span class="chip">Prompt Engineering</span>
+          </div>
+        </div>
+        <div class="spec-row">
+          <div class="cat">Testing</div>
+          <div class="chips">
+            <span class="chip">Jest</span><span class="chip">Mockito</span><span class="chip">SIT / UAT</span><span class="chip">Production Validation</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== EXPERIENCE ===================== -->
+  <section id="experience">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">Work Experience</p>
+        <h2>Five roles, one continuous thread of modernisation</h2>
+      </div>
+
+      <!-- OCBC -->
+      <article class="role reveal">
+        <div class="role-head">
+          <div>
+            <div class="role-sheet">SHEET 05 OF 05</div>
+            <h3>Tech Lead Engineer</h3>
+            <div class="company">OCBC Bank</div>
+          </div>
+          <div class="role-meta">Singapore<br>2022 — Present</div>
+        </div>
+        <div class="role-body">
+          <div class="subprojects">
+            <div class="subproject">
+              <span class="badge">Flagship</span>
+              <h4>GWB Modernisation — Online Equities Trading Platform</h4>
+              <ul class="bullets">
+                <li>Architected and led end-to-end frontend development of OCBC's flagship Online Equities trading platform for premium GWB banking customers.</li>
+                <li>Directed a frontend team of <strong>8–9 engineers</strong>; defined system architecture in collaboration with iOCBC, OSPL and GWB cross-functional teams.</li>
+                <li>Delivered on schedule, driving measurable growth in equities trading revenue and user adoption.</li>
+                <li>Recognised with the <strong>Spot-On Award (2025)</strong>; commended by the RDC Director, Platform Lead and Tribe Lead.</li>
+              </ul>
+            </div>
+            <div class="subproject">
+              <span class="badge">Regulatory</span>
+              <h4>T-Bills, SG Bonds &amp; Savings Bonds</h4>
+              <ul class="bullets">
+                <li>Played a full-stack role in a high-impact MAS regulatory project covering T-Bills, SG Government Bonds, Singapore Savings Bonds, Retirement Portfolio and SRS Contribution.</li>
+                <li>Architected batch job scheduling using Java Spring Boot and Control-M for end-to-end regulatory processing.</li>
+                <li>Awarded both the <strong>Spot-On Award</strong> and the <strong>CEO Award 2023</strong> for strategic delivery.</li>
+              </ul>
+            </div>
+            <div class="subproject">
+              <span class="badge">Migration</span>
+              <h4>Government Module Decommission</h4>
+              <ul class="bullets">
+                <li>Led re-engineering of the Government Module (Retirement Portfolio, SRS Contribution, CFP Board Refund, Corporate Actions) from legacy ASP.NET to React.js/TypeScript.</li>
+                <li>Became the most-used feature in OCBC Internet Banking in 2024, serving MAS, Premium and Corporate Banking customers.</li>
+                <li>Delivered measurable improvements in system efficiency, scalability and user experience post-migration.</li>
+              </ul>
+            </div>
+            <div class="subproject">
+              <span class="badge">Migration</span>
+              <h4>Back Office Decommission — Unit Trust Module</h4>
+              <ul class="bullets">
+                <li>Led migration of the Unit Trust module from legacy ASP.NET to React.js/TypeScript as part of the Back Office modernisation initiative.</li>
+                <li>Resolved long-standing performance bottlenecks, improving operational efficiency for internet banking staff.</li>
+              </ul>
+            </div>
+            <div class="subproject">
+              <span class="badge">Product</span>
+              <h4>Money Management 2.0</h4>
+              <ul class="bullets">
+                <li>Led the frontend team to redesign the Money Management module, enabling spending tracking and budget creation for OCBC customers.</li>
+                <li>Provided architectural guidance to the MFE team, standardising React.js patterns across the micro-frontend ecosystem.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- HCL - UOB -->
+      <article class="role reveal">
+        <div class="role-head">
+          <div>
+            <div class="role-sheet">SHEET 04 OF 05</div>
+            <h3>Tech Lead</h3>
+            <div class="company">HCL Technologies — UOB Bank</div>
+          </div>
+          <div class="role-meta">Singapore<br>2020 — 2022</div>
+        </div>
+        <div class="role-body">
+          <div class="subprojects">
+            <div class="subproject">
+              <span class="badge">Payments</span>
+              <h4>RTP — Request to Pay</h4>
+              <ul class="bullets">
+                <li>Led technical delivery of UOB's merchant payment verification platform via React.js and TypeScript.</li>
+                <li>Served as primary liaison between business stakeholders and the technical team, aligning solutions with regulatory standards.</li>
+                <li>Drove UX, security and transaction efficiency improvements across the payment request flow.</li>
+              </ul>
+            </div>
+            <div class="subproject">
+              <span class="badge">Onboarding</span>
+              <h4>COB — Customer On-Boarding</h4>
+              <ul class="bullets">
+                <li>Designed and implemented microservices-based frontend features for secure transaction signing.</li>
+                <li>Optimised SQL queries for backend data management and automated recurring processes via Control-M.</li>
+                <li>Coordinated end-to-end testing across SIT, UAT and Production environments.</li>
+              </ul>
+            </div>
+            <div class="subproject">
+              <span class="badge">Platform</span>
+              <h4>PAM — Personal Authentication Module</h4>
+              <ul class="bullets">
+                <li>Built modular, reusable React.js components for UOB's merchant payment gateway.</li>
+                <li>Integrated frontend with backend microservices APIs, ensuring seamless data flow between merchant systems and UOB's payment infrastructure.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Thales -->
+      <article class="role reveal">
+        <div class="role-head">
+          <div>
+            <div class="role-sheet">SHEET 03 OF 05</div>
+            <h3>Software Engineer</h3>
+            <div class="company">Thales DIS</div>
+          </div>
+          <div class="role-meta">Singapore<br>2019 — 2021</div>
+        </div>
+        <div class="role-body">
+          <ul class="bullets">
+            <li>Designed and implemented Android Payment SDK features for digital card lifecycle management, wallet provisioning and contactless Tap &amp; Pay services.</li>
+            <li>Built and maintained Jenkins CI/CD pipelines via shell scripts, reducing manual release effort and improving deployment reliability.</li>
+            <li>Performed penetration testing and implemented anti-tampering / anti-hooking mechanisms, validated against MasterCard, Visa and PURE certification standards.</li>
+            <li>Managed end-to-end SDK release process, delivering versioned releases to financial institution clients on schedule.</li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- TCS -->
+      <article class="role reveal">
+        <div class="role-head">
+          <div>
+            <div class="role-sheet">SHEET 02 OF 05</div>
+            <h3>System Analyst</h3>
+            <div class="company">Tata Consultancy Services</div>
+          </div>
+          <div class="role-meta">India<br>2017 — 2019</div>
+        </div>
+        <div class="role-body">
+          <ul class="bullets">
+            <li>Developed the Campus Attendance App (Android / Spring Boot / REST API), optimised for high-concurrency recruitment events — awarded the <strong>Beyond Performance Award</strong> for exceptional leadership.</li>
+            <li>Built Auto Draw AI — an Android predictive drawing app with an integrated Python ML model achieving <strong>95% prediction accuracy</strong>.</li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- Zenkast -->
+      <article class="role reveal">
+        <div class="role-head">
+          <div>
+            <div class="role-sheet">SHEET 01 OF 05</div>
+            <h3>Android Developer</h3>
+            <div class="company">Zenkast.com</div>
+          </div>
+          <div class="role-meta">India<br>2016 — 2017</div>
+        </div>
+        <div class="role-body">
+          <ul class="bullets">
+            <li>Developed and published the Arcanemind Education App, ITC Chef Masala multiplayer game, and the BRP credit card staff management app on the Google Play Store.</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===================== AWARDS ===================== -->
+  <section id="awards">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">Achievements &amp; Awards</p>
+        <h2>Citations</h2>
+      </div>
+      <div class="awards-grid reveal">
+        <div class="award-card">
+          <span class="year">OCBC — 2025</span>
+          <h4>Spot-On Award</h4>
+          <p>For delivery of OCBC's Online Equities Trading Platform.</p>
+        </div>
+        <div class="award-card">
+          <span class="year">OCBC — 2023</span>
+          <h4>CEO Award</h4>
+          <p>For strategic delivery of the T-Bills &amp; SG Bonds regulatory initiative.</p>
+        </div>
+        <div class="award-card">
+          <span class="year">OCBC — 2023</span>
+          <h4>Spot-On Award</h4>
+          <p>For delivery of the Treasury Bills (T-Bills) product.</p>
+        </div>
+        <div class="award-card">
+          <span class="year">TCS — 2017</span>
+          <h4>Beyond Performance Award</h4>
+          <p>For exceptional leadership on the Recruitment Process App.</p>
+        </div>
+      </div>
+
+      <div class="divider">Certifications &amp; Education</div>
+
+      <div class="cred-grid reveal">
+        <div>
+          <h3>Certifications</h3>
+          <div class="cred-item">
+            <div class="t">AWS Certified Cloud Practitioner</div>
+            <div class="s">CLF-C02</div>
+          </div>
+          <div class="cred-item">
+            <div class="t">Claude Code in Action</div>
+            <div class="s">AI-assisted engineering</div>
+          </div>
+          <div class="cred-item">
+            <div class="t">Google AI Essentials<span class="issuer-tag"><span class="dot"></span>Google</span></div>
+            <div class="s">Google Career Certificates — Issued 28 Jul 2026 · <a href="https://www.credly.com/go/Kr8bK4cY" target="_blank" rel="noopener">Verify credential</a></div>
+          </div>
+        </div>
+        <div>
+          <h3>Education</h3>
+          <div class="cred-item">
+            <div class="t">Master of Science, Information Technology</div>
+            <div class="s">Mumbai University, India — 2019</div>
+          </div>
+          <div class="cred-item">
+            <div class="t">Bachelor of Science, Information Technology</div>
+            <div class="s">Mumbai University, India — 2016</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===================== CONTACT / FOOTER ===================== -->
+<footer id="contact">
+  <div class="wrap footer-inner">
+    <p class="eyebrow">Contact</p>
+    <h2>Open to Technical Leadership &amp; Front-End Architecture roles in Singapore.</h2>
+    <p class="footer-sub">Currently based in Singapore and actively exploring new opportunities in banking, fintech and capital markets. Reach out directly — I reply quickly.</p>
+
+    <div class="contact-grid">
+      <div class="contact-item">
+        <div class="label">Email</div>
+        <a href="mailto:jyotinair31@gmail.com">jyotinair31@gmail.com</a>
+      </div>
+      <div class="contact-item">
+        <div class="label">Phone</div>
+        <a href="tel:+6591311943">+65 9131 1943</a>
+      </div>
+      <div class="contact-item">
+        <div class="label">LinkedIn</div>
+        <a href="https://linkedin.com/in/jyoti-nair-software-engineer" target="_blank" rel="noopener">linkedin.com/in/jyoti-nair-software-engineer</a>
+      </div>
+    </div>
+
+    <div class="foot-bottom">
+      <span>© <span id="year"></span> Jyoti Achudhan Nair</span>
+      <span>Singapore</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  var toggle = document.getElementById('navToggle');
+  var links = document.getElementById('navLinks');
+  toggle.addEventListener('click', function(){
+    var isOpen = links.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', isOpen);
+  });
+  links.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){
+      links.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {threshold: 0.12});
+    document.querySelectorAll('.reveal').forEach(function(el){ observer.observe(el); });
+  } else {
+    document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('is-visible'); });
+  }
+</script>
+
+</body>
+</html>
